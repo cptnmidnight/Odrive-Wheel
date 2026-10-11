@@ -27,10 +27,11 @@ def version_str_to_tuple(version_string):
 def get_version_from_git():
     script_dir = os.path.dirname(os.path.realpath(__file__))
     try:
-        # Determine the current git commit version
-        git_tag = subprocess.check_output(["git", "describe", "--always", "--tags", "--match=*fw*", "--dirty=*"],
+        # Determine the current git commit version --- we are not using 'fw' style version tagging, I think it's from upstream openffb version matching?
+        git_tag = subprocess.check_output(["git", "describe", "--always", "--tags", "--match=*v*", "--dirty=*"],
             cwd=script_dir)
-        git_tag = git_tag.decode(sys.stdout.encoding or 'ascii').rstrip('\n')
+        git_tag = git_tag.decode(sys.stdout.encoding or 'utf-8', errors='ignore').rstrip('\n')
+	#git_tag = git_tag.decode(sys.stdout.encoding or 'ascii').rstrip('\n')
 
         (major, minor, revision, is_prerelease) = version_str_to_tuple(git_tag)
 
